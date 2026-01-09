@@ -1,0 +1,26 @@
+[project]
+name = "ncat-appeal-scraper"
+version = "0.1.0"
+description = "Scraper and classifier for NCAT Appeal Panel decisions from NSW Caselaw"
+requires-python = ">=3.10"
+dependencies = [
+    "httpx>=0.27.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=5.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+
+[project.scripts]
+ncat-scraper = "ncat_scraper.main:run"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
