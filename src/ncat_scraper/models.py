@@ -64,3 +64,35 @@ def decisions_to_json(decisions: list[Decision], indent: int = 2) -> str:
         indent=indent,
         ensure_ascii=False
     )
+
+
+def decisions_to_json_expanded(decisions: list[Decision], indent: int = 2) -> str:
+    """Convert list of decisions to JSON with expanded ground information.
+
+    Each ground code is expanded to include category, description, and authority.
+    """
+    from .classifier import get_ground_info
+
+    expanded = []
+    for d in decisions:
+        d_dict = d.to_dict()
+
+        # Expand grounds_of_appeal
+        d_dict["grounds_of_appeal_expanded"] = [
+            get_ground_info(code) or {"code": code, "category": "unknown", "description": code}
+            for code in d.grounds_of_appeal
+        ]
+
+        # Expand successful_grounds
+        d_dict["successful_grounds_expanded"] = [
+            get_ground_info(code) or {"code": code, "category": "unknown", "description": code}
+            for code in d.successful_grounds
+        ]
+
+        expanded.append(d_dict)
+
+    return json.dumps(
+        {"decisions": expanded},
+        indent=indent,
+        ensure_ascii=False
+    )
